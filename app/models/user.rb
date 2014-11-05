@@ -6,12 +6,18 @@ class User < ActiveRecord::Base
 
   devise :omniauthable, :omniauth_providers => [:facebook]
 
-  def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0,20]
-      user.name = auth.info.name   # assuming the user model has a name
-      user.image = auth.info.image # assuming the user model has an image
+  def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
+    user = User.where(:provider => auth.provider, :uid => auth.uid).first
+
+    unless user
+      user = User.create(
+          provider:auth.provider,
+           uid:auth.uid,
+           email:auth.info.email,
+           password:Devise.friendly_token[0,20]
+      )
     end
+
+    user
   end
 end
