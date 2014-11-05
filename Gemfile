@@ -29,6 +29,8 @@ gem 'spring',        group: :development
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
+gem 'fb_graph'
+
 gem 'bootstrap-sass'
 
 # Use ActiveModel has_secure_password
