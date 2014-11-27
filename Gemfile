@@ -30,6 +30,7 @@ gem 'devise'
 gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'fb_graph'
+gem 'gmaps4rails'
 
 gem 'bootstrap-sass'
 
