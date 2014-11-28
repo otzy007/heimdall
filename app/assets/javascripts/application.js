@@ -15,3 +15,16 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require_tree .
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(requestEvents);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function requestEvents(position) {
+    var queryURL = "?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude;
+    $(location).attr('href', queryURL);
+}
