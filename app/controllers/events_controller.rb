@@ -9,12 +9,24 @@ class EventsController < ApplicationController
       @search_string = 'Bucharest'
     end
     p @search_string
-    @events = FbGraph::Event.search(@search_string, access_token: current_user.token, fields: 'cover,name,description,venue,start_time,picture')
+    @events = FbGraph::Event.search(
+        @search_string,
+        access_token: current_user.token,
+        fields: 'cover,name,description,venue,start_time,picture'
+    ).reject do |e|
+      EventFilter.exists?(action: "hide", event_id: e.identifier)
+    end
   end
 
 
   def map
 
+  end
+
+  def hide
+    EventFilter.create(event_id: params.require(:event_id), action: 'hide')
+
+    render json: {erors: []}
   end
 
   private

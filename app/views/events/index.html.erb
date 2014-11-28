@@ -7,7 +7,7 @@
 
 <table>
     <% @events.each do |e| %>
-        <tr>
+        <tr id="<%= e.identifier %>">
           <td>
             <% if e.raw_attributes['cover']  %>
                 <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo"/>
@@ -15,6 +15,7 @@
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
             <%= e.start_time %>
+            <a href="#" onclick="Application.hide_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-down" style="font-size:30px"></span></a>
           </td>
         </tr>
     <% end %>

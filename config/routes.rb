@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :events do
     get 'map'
+    get 'hide'
   end
 
   root 'events#index'
