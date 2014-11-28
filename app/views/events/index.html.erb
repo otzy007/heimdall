@@ -5,12 +5,12 @@
 //    });
 </script>
 
-<table>
-    <% @events.each do |e| %>
-        <tr id="<%= e.identifier %>">
+<table class="table table-condensed">
+    <% @events.each_with_index do |e, i| %>
+        <tr id="<%= e.identifier %>" class="<%= i%2==0? 'active' : ''%>">
           <td>
             <% if e.raw_attributes['cover']  %>
-                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo"/>
+                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" width="16%" class="banner"/>
             <% end %>
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
