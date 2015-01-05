@@ -10,11 +10,12 @@
         <tr id="<%= e.identifier %>" class="<%= i%2==0? 'active' : ''%>">
           <td>
             <% if e.raw_attributes['cover']  %>
-                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" width="16%" class="banner"/>
+                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" class="banner"/>
             <% end %>
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
             <%= e.start_time %>
+            <a href="#"></a><span class="glyphicon glyphicon-thumbs-up" style="font-size:30px"></span></a>
             <a href="#" onclick="Application.hide_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-down" style="font-size:30px"></span></a>
           </td>
         </tr>
