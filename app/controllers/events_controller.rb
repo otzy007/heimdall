@@ -29,6 +29,18 @@ class EventsController < ApplicationController
     render json: {erors: []}
   end
 
+  def like
+    EventFilter.create(event_id: params.require(:event_id), action: 'like')
+
+    render json: {erors: []}
+  end
+
+  def dislike
+    EventFilter.create(event_id: params.require(:event_id), action: 'dislike')
+
+    render json: {erors: []}
+  end
+
   private
   def name_for_coords(latitude, longitude)
     Gmaps4rails.places(latitude, longitude, 'AIzaSyBuvYB3BBl-wa8F8Y4BqMT_Pn4hsSq_2dc', nil, 200)[0][:name]

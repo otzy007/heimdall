@@ -8,3 +8,9 @@ window.Application ||= {}
 Application.hide_event = (event_id) ->
   request = $.get 'events/' + event_id + '/hide'
   request.success (data) -> $('#'+event_id.toString()).remove()
+
+Application.like_event = (event_id) ->
+  request = $.get 'events/' + event_id + '/like'
+
+Application.dislike_event = (event_id) ->
+  request = $.get 'events/' + event_id + '/dislike'

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :events do
     get 'map'
     get 'hide'
+    get 'like'
+    get 'dislike'
   end
 
   root 'events#index'
