@@ -3,18 +3,31 @@ class EventsController < ApplicationController
     begin
       latitude = params.require(:latitude)
       longitude = params.require(:longitude)
+      filter = params.require('filter')
 
       @search_string = name_for_coords(latitude, longitude)
     rescue ActionController::ParameterMissing
       @search_string = 'Bucharest'
     end
     p @search_string
+    p filter
+    p params
     @events = FbGraph::Event.search(
         @search_string,
         access_token: current_user.token,
         fields: 'cover,name,description,venue,start_time,picture'
     ).reject do |e|
       EventFilter.exists?(action: "hide", event_id: e.identifier)
+    end
+
+    if filter && filter.key?(:filter)
+      @events.collect do |e|
+          filter = Filter.find_by_name(filter[:filter])
+          filter.split(',').any? do |k|
+            p k
+            ActiveSupport::Inflector.transliterate(name.includes?(k)) || ActiveSupport::Inflector.transliterate(description.includes?(k))
+          end
+        end
     end
   end
 
