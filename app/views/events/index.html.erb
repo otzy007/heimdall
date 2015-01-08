@@ -7,7 +7,7 @@
 
 <table class="table table-condensed">
     <% @events.each_with_index do |e, i| %>
-        <tr id="<%= e.identifier %>" class="<%= i%2==0? 'active' : ''%>">
+        <tr id="<%= e.identifier %>" class="<%= i%2==0? 'active' : 'active2'%>">
           <td>
             <% if e.raw_attributes['cover']  %>
                 <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" class="banner"/>
@@ -15,10 +15,16 @@
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
             <%= e.start_time %>
-            <a href="#" onclick="Application.like_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-up" style="font-size:30px"></span></a>
-            <a href="#" onclick="Application.dislike_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-down" style="font-size:30px"></span></a>
-            <a href="#" onclick="Application.hide_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-remove" style="font-size:30px"></span></a>
           </td>
+			
+		<td>
+				<div class="buttons">
+		        <a href="#" onclick="Application.like_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-up" style="font-size:30px"></span></a>
+		        <a href="#" onclick="Application.dislike_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-down" style="font-size:30px"></span></a>
+		        <a href="#" onclick="Application.hide_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-remove" style="font-size:30px"></span></a>
+				<div>
+			</td>
         </tr>
+
     <% end %>
 </table>

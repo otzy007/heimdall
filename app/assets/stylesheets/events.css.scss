@@ -7,10 +7,20 @@
 
 .login .background {
   position: absolute;
-//  background-size: 100% auto;
-//  background-image: url(city.jpg);
   width: 100%;
   z-index: -1;
+}
+
+.active{
+	background: #f3625b;
+}
+
+.active2{
+	background: #D8CECE;
+}
+
+body{
+	background-image: url("background.jpg");
 }
 
 .login .facebook-login {
@@ -20,4 +30,37 @@
   margin-right: -50%;
   transform: translate(-50%, -50%)
 }
+
+.table {
+	width: 60%;
+	max-width: 100%;
+	margin-bottom: 20px;
+	margin: auto;
+	text-align: center;
+}
+
+img {
+	border: 0;
+	width: 30%;
+	float: left;
+	max-height: 100px;
+}
+
+.buttons {
+	position: relative;
+}
+
+.table > thead > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > th,
+.table > tbody > tr > td,
+.table > tfoot > tr > th,
+.table > tfoot > tr > td {
+  padding: 8px;
+  line-height: 1.428571429;
+  vertical-align: top;
+  border-top: 2px solid #646464;
+}
+
+
 
