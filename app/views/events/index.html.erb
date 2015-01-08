@@ -10,7 +10,7 @@
         <tr id="<%= e.identifier %>" class="<%= i%2==0? 'active' : 'active2'%>">
           <td>
             <% if e.raw_attributes['cover']  %>
-                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" class="banner"/>
+                <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" class="banner events-img"/>
             <% end %>
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
@@ -18,7 +18,7 @@
           </td>
 			
 		<td>
-				<div class="buttons">
+				<div>
 		        <a href="#" onclick="Application.like_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-up" style="font-size:30px"></span></a>
 		        <a href="#" onclick="Application.dislike_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-down" style="font-size:30px"></span></a>
 		        <a href="#" onclick="Application.hide_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-remove" style="font-size:30px"></span></a>
