@@ -1,10 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'therubyracer'
-<<<<<<< HEAD
 
-=======
->>>>>>> 9fd25cb01babfdfdc5022801cdd7b9073b8ab8be
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.7'
 # Use sqlite3 as the database for Active Record
