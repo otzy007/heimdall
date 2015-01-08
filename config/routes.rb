@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'map/index'
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
 
   resources :events do
@@ -10,6 +12,8 @@ Rails.application.routes.draw do
   end
 
   resources :categories, param: :name
+
+  resources :map
 
   root 'events#index'
   # The priority is based upon order of creation: first created -> highest priority.

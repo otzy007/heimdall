@@ -31,6 +31,8 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'fb_graph'
 gem 'gmaps4rails'
+gem 'geocoder'
+gem 'underscore-rails'
 
 gem 'bootstrap-sass'
 
@@ -45,4 +47,3 @@ gem 'bootstrap-sass'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
