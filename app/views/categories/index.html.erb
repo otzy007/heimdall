@@ -1,13 +1,14 @@
-<p>(HINT: click the tags)</p>
+<h1>Topics of interest</h1>
 
 <div class="tag-wrapper">
 
   <% @categories.each do |c| %>
       <div class="tag">
-        <input type="checkbox" />
+        <input type="checkbox" id="<%= c.name %>" onchange="Application.checked('<%= c.name %>')" />
         <label for=""><%= c.name %></label>
         <i class="fa fa-plus"></i>
         <i class="fa fa-check"></i>
       </div>
   <% end %>
+  <div align="center" class="done-button"><%= link_to 'Done', :events, class: 'btn btn-primary btn-lg btn-success' %></div>
 </div><!-- End Wrapper -->

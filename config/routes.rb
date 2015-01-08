@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get 'dislike'
   end
 
-  resources :categories
+  resources :categories, param: :name
 
   root 'events#index'
   # The priority is based upon order of creation: first created -> highest priority.

@@ -96,3 +96,7 @@ p {
     transform: scale(1);
   }
 }
+
+.done-button {
+    padding-top: 30px;
+}
