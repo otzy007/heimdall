@@ -3,15 +3,12 @@ class EventsController < ApplicationController
     begin
       latitude = params.require(:latitude)
       longitude = params.require(:longitude)
-      filter = params.require('filter')
 
       @search_string = name_for_coords(latitude, longitude)
     rescue ActionController::ParameterMissing
       @search_string = 'Bucharest'
     end
-    p @search_string
-    p filter
-    p params
+
     @events = FbGraph::Event.search(
         @search_string,
         access_token: current_user.token,
@@ -20,14 +17,25 @@ class EventsController < ApplicationController
       EventFilter.exists?(action: "hide", event_id: e.identifier)
     end
 
-    if filter && filter.key?(:filter)
-      @events.collect do |e|
-          filter = Filter.find_by_name(filter[:filter])
-          filter.split(',').any? do |k|
-            p k
-            ActiveSupport::Inflector.transliterate(name.includes?(k)) || ActiveSupport::Inflector.transliterate(description.includes?(k))
+    begin
+      # Filter the event based on the keywords defined in Category by the name of the category
+      filter_param = params.require(:filter)
+
+      #select only the events that containt at least one keyword that defines the category
+      @events = @events.select do |e|
+          filter = Category.find_by_name(filter_param.capitalize).keywords
+
+          #return true if any of the keywords are found in the description or the name of the event
+          res = filter.split(',').any? do |k|
+            ActiveSupport::Inflector.transliterate(e.name).include?(k) ||
+                ActiveSupport::Inflector.transliterate(e.description.to_s).include?(k)
           end
-        end
+
+          e if res
+      end
+
+    rescue ActionController::ParameterMissing
+      # no category set. Show all the events
     end
   end
 
