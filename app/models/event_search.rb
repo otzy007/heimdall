@@ -56,6 +56,12 @@ class EventSearch
       end
     end
 
-    @filtered_events
+    @filtered_events.unshift(add_friends_events).flatten
+  end
+
+  def add_friends_events
+    FBFriends.new(User.first.token).friends_events.reject do |e|
+      @user.event_filters.exists?(action: "hide", event_id: e.identifier)
+    end
   end
 end
