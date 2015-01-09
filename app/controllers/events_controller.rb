@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+  before_filter :find_or_create_event, only: [:hide, :like, :dislike]
+
   def index
     begin
       latitude = params.require(:latitude)
@@ -18,7 +20,7 @@ class EventsController < ApplicationController
       @filter_param = nil
     end
 
-    @events = EventSearch.new(@search_string, current_user.token, @filter_param).search
+    @events = EventSearch.new(@search_string, current_user, @filter_param).events_ordered_by_like_dislike
   end
 
 
@@ -27,19 +29,22 @@ class EventsController < ApplicationController
   end
 
   def hide
-    EventFilter.create(event_id: params.require(:event_id), action: 'hide')
+    @event.action = 'hide'
+    @event.save
 
     render json: {erors: []}
   end
 
   def like
-    EventFilter.create(event_id: params.require(:event_id), action: 'like')
+    @event.action = 'like'
+    @event.save
 
     render json: {erors: []}
   end
 
   def dislike
-    EventFilter.create(event_id: params.require(:event_id), action: 'dislike')
+    @event.action = 'dislike'
+    @event.save
 
     render json: {erors: []}
   end
@@ -47,5 +52,9 @@ class EventsController < ApplicationController
   private
   def name_for_coords(latitude, longitude)
     Gmaps4rails.places(latitude, longitude, 'AIzaSyBuvYB3BBl-wa8F8Y4BqMT_Pn4hsSq_2dc', nil, 200)[0][:name]
+  end
+
+  def find_or_create_event
+    @event = current_user.event_filters.find_or_create_by(event_id: params.require(:event_id))
   end
 end

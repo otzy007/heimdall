@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150107185239) do
+ActiveRecord::Schema.define(version: 20150109120339) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -23,6 +23,15 @@ ActiveRecord::Schema.define(version: 20150107185239) do
   create_table "event_filters", force: true do |t|
     t.integer  "event_id"
     t.string   "action"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
+  create_table "keywords", force: true do |t|
+    t.string   "keyword"
+    t.integer  "score"
+    t.string   "parent"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
