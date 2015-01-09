@@ -27,19 +27,19 @@ class EventsController < ApplicationController
   end
 
   def hide
-    EventFilter.create(event_id: params.require(:event_id), action: 'hide')
+    current_user.event_filters.create(event_id: params.require(:event_id), action: 'hide')
 
     render json: {erors: []}
   end
 
   def like
-    EventFilter.create(event_id: params.require(:event_id), action: 'like')
+    current_user.event_filters.create(event_id: params.require(:event_id), action: 'like')
 
     render json: {erors: []}
   end
 
   def dislike
-    EventFilter.create(event_id: params.require(:event_id), action: 'dislike')
+    current_user.event_filters.create(event_id: params.require(:event_id), action: 'dislike')
 
     render json: {erors: []}
   end
