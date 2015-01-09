@@ -19,7 +19,11 @@ class EventSearch
     if @filter
       filter = Category.find_by_name(@filter.capitalize).keywords
     else
-      filter = @user.my_categories.collect {|c| Category.find(c.category_id).keywords }.join(',')  
+      if @user.my_categories.empty?
+        filter = Category.all.collect {|c| c.keywords}.join(',')
+      else
+        filter = @user.my_categories.collect {|c| Category.find(c.category_id).keywords }.join(',')
+      end
     end
 
     #select only the events that containt at least one keyword that defines the category
