@@ -17,18 +17,20 @@ class EventSearch
 
     # Filter the event based on the keywords defined in Category by the name of the category
     if @filter
-      #select only the events that containt at least one keyword that defines the category
-      @events = @events.select do |e|
-        filter = Category.find_by_name(@filter.capitalize).keywords
+      filter = Category.find_by_name(@filter.capitalize).keywords
+    else
+      filter = @user.my_categories.collect {|c| Category.find(c.category_id).keywords }.join(',')  
+    end
 
-        #return true if any of the keywords are found in the description or the name of the event
-        res = filter.split(',').any? do |k|
-          ActiveSupport::Inflector.transliterate(e.name).include?(k) ||
-          ActiveSupport::Inflector.transliterate(e.description.to_s).include?(k)
-        end
-
-        e if res
+    #select only the events that containt at least one keyword that defines the category
+    @events = @events.select do |e|
+      #return true if any of the keywords are found in the description or the name of the event
+      res = filter.split(',').any? do |k|
+        ActiveSupport::Inflector.transliterate(e.name).include?(k) ||
+        ActiveSupport::Inflector.transliterate(e.description.to_s).include?(k)
       end
+
+      e if res
     end
 
     @events
@@ -36,7 +38,7 @@ class EventSearch
 
   def events_ordered_by_like_dislike
     search
-    
+
     @filtered_events = []
     @events.map do |e|
       filter = @user.event_filters.find_by_event_id(e.identifier)
