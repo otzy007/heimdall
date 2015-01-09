@@ -31,6 +31,23 @@ class EventSearch
       end
     end
 
-    @events
+    @events = order_by_like_dislike
+  end
+
+  def order_by_like_dislike
+    @filtered_events = []
+    @events.map do |e|
+      filter = @user.event_filters.find_by_event_id(e.identifier)
+
+      if filter && filter.action == 'like'
+        # push the event in the front
+        @filtered_events.unshift(e)
+      else
+        # push it at the end
+        @filtered_events << e
+      end
+    end
+
+    @filtered_events
   end
 end
