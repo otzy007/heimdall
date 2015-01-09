@@ -12,7 +12,7 @@ class EventSearch
     access_token: @token,
     fields: 'cover,name,description,venue,start_time,picture'
     ).reject do |e|
-      EventFilter.exists?(action: "hide", event_id: e.identifier)
+      @user.event_filters.exists?(action: "hide", event_id: e.identifier)
     end
 
     # Filter the event based on the keywords defined in Category by the name of the category
