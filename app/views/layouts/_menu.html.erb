@@ -1,5 +1,6 @@
 <% if current_user %>
     <li class="active"><a href="/">Events</a></li>
     <li><a href="/map">Map</a></li>
+    <li><a href="/categories">Preferences</a></li>
     <li> <%= link_to "Log Out", :destroy_user_session, :method => :delete %> </li>
 <% end %>
