@@ -18,7 +18,7 @@ class EventsController < ApplicationController
       @filter_param = nil
     end
 
-    @events = EventSearch.new(@search_string, current_user.token, @filter_param).search
+    @events = EventSearch.new(@search_string, current_user, @filter_param).search
   end
 
 

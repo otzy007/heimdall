@@ -1,8 +1,9 @@
 class EventSearch
-  def initialize(search_string, token, filter = nil)
+  def initialize(search_string, user, filter = nil)
     @filter = filter
     @search_string = search_string
-    @token = token
+    @user = user
+    @token = user.token
   end
 
   def search
