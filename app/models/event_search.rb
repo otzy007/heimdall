@@ -31,10 +31,12 @@ class EventSearch
       end
     end
 
-    @events = order_by_like_dislike
+    @events
   end
 
-  def order_by_like_dislike
+  def events_ordered_by_like_dislike
+    search
+    
     @filtered_events = []
     @events.map do |e|
       filter = @user.event_filters.find_by_event_id(e.identifier)
