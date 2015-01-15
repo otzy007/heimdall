@@ -8,9 +8,9 @@ class EventSearch
 
   def search
     @events = FbGraph::Event.search(
-    @search_string,
-    access_token: @token,
-    fields: 'cover,name,description,venue,start_time,picture'
+      @search_string,
+      access_token: @token,
+      fields: 'cover,name,description,venue,start_time,picture'
     ).reject do |e|
       @user.event_filters.exists?(action: "hide", event_id: e.identifier)
     end
