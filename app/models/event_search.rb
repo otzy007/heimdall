@@ -51,8 +51,10 @@ class EventSearch
         if filter.action == 'like'
           # push the event in the front
           @filtered_events[e] += 1
+          @filtered_events[e] += 10 if filter.user_id == @user.id
         elsif filter.action == 'dislike'
           @filtered_events[e] -= 1
+          @filtered_events[e] -= 10 if filter.user_id == @user.id
         end
       end
     end
