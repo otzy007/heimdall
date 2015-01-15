@@ -8,9 +8,11 @@ class EventsController < ApplicationController
 
       @search_string = name_for_coords(latitude, longitude)
     rescue ActionController::ParameterMissing
-      @search_string = 'Bucharest'
+      @search_string = 'București'
     end
-
+    p '!!!!!!!!!!!!!!!'
+    p 'SEARCHING FOR'
+    p @search_string
     begin
       # Filter the event based on the keywords defined in Category by the name of the category
       @filter_param = params.require(:filter)
@@ -50,10 +52,6 @@ class EventsController < ApplicationController
   end
 
   private
-  def name_for_coords(latitude, longitude)
-    Gmaps4rails.places(latitude, longitude, 'AIzaSyBuvYB3BBl-wa8F8Y4BqMT_Pn4hsSq_2dc', nil, 200)[0][:name]
-  end
-
   def find_or_create_event
     @event = current_user.event_filters.find_or_create_by(event_id: params.require(:event_id))
   end

@@ -1,9 +1,9 @@
-<script>
+// <script>
 //    $(document).ready(function(){
 //        if (location.href.indexOf('latitude') < 0)
 //            getLocation();
 //    });
-</script>
+// </script>
 
 <table class="table table-condensed">
     <% @events.each_with_index do |e, i| %>
@@ -16,7 +16,7 @@
             <%= e.description[0..30] if e.description %>
             <%= e.start_time %>
           </td>
-			
+
 		<td>
 				<div>
 		        <a href="#" onclick="Application.like_event(<%= e.identifier %>)"><span class="glyphicon glyphicon-thumbs-up" style="font-size:30px"></span></a>
