@@ -44,19 +44,26 @@ class EventSearch
     search
 
     @filtered_events = []
+    @disliked_events = []
+
     @events.map do |e|
       filter = @user.event_filters.find_by_event_id(e.identifier)
 
-      if filter && filter.action == 'like'
-        # push the event in the front
-        @filtered_events.unshift(e)
+      if filter
+        if filter.action == 'like'
+          # push the event in the front
+          @filtered_events.unshift(e)
+        elsif filter.action == 'dislike'
+          @disliked_events << e
+        end
       else
         # push it at the end
         @filtered_events << e
       end
     end
 
-    @filtered_events.unshift(add_friends_events).flatten
+    # add friends events at the beginning of the list
+    (@filtered_events.unshift(add_friends_events) << @disliked_events).flatten
   end
 
   def add_friends_events
