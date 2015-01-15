@@ -28,7 +28,7 @@ class EventSearch
       end
     end
 
-    #select only the events that containt at least one keyword that defines the category
+    #select only the events that contain at least one keyword that defines the category
     @events = @events.select do |e|
       #return true if any of the keywords are found in the description or the name of the event
       res = filter.split(',').any? do |k|
