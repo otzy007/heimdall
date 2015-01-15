@@ -60,12 +60,14 @@ class EventSearch
     end
 
     # add friends events at the beginning of the list
-    @filtered_events.sort_by {|_,v| v}.reverse.to_h.keys
+    @filtered_events.merge(add_friends_events) {|_, oldval, newval| oldval + newval}.sort_by {|_,v| v}.reverse.to_h.keys
   end
 
   def add_friends_events
-    FBFriends.new(User.first.token).friends_events.reject do |e|
+    events = FBFriends.new(User.first.token).friends_events.reject do |e|
       @user.event_filters.exists?(action: "hide", event_id: e.identifier)
     end
+
+    events.zip([5] * events.size).to_h
   end
 end
