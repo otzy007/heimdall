@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150116092515) do
+ActiveRecord::Schema.define(version: 20150116130529) do
 
   create_table "categories", force: true do |t|
     t.string   "name"
@@ -30,7 +30,7 @@ ActiveRecord::Schema.define(version: 20150116092515) do
 
   create_table "keywords", force: true do |t|
     t.string   "keyword"
-    t.integer  "score"
+    t.integer  "score",      default: 0
     t.string   "parent"
     t.datetime "created_at"
     t.datetime "updated_at"

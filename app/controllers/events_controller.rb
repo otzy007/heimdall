@@ -41,6 +41,8 @@ class EventsController < ApplicationController
     @event.action = 'like'
     @event.save
 
+    add_keywords_score(@event.event_id, 1)
+
     render json: {erors: []}
   end
 
@@ -48,11 +50,28 @@ class EventsController < ApplicationController
     @event.action = 'dislike'
     @event.save
 
+    add_keywords_score(@event.event_id, -1)
+
     render json: {erors: []}
   end
 
   private
   def find_or_create_event
     @event = current_user.event_filters.find_or_create_by(event_id: params.require(:event_id))
+  end
+
+  def add_keywords_score(event_id, score)
+    ev = FbGraph::Event.new(event_id, access_token: current_user.token).fetch
+
+    ev.raw_attributes[:description].split(/\W+/).each do |keyword|
+      if keyword.size > 3
+        keyword = ActiveSupport::Inflector.transliterate(keyword)
+        k = current_user.keywords.find_or_create_by(keyword: keyword)
+
+        k.score = 0 if k.score.nil?
+        k.score += score
+        k.save
+      end
+    end
   end
 end
