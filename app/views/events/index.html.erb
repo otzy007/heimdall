@@ -1,9 +1,9 @@
-// <script>
-//    $(document).ready(function(){
-//        if (location.href.indexOf('latitude') < 0)
-//            getLocation();
-//    });
-// </script>
+ <script>
+   $(document).ready(function(){
+       if (location.href.indexOf('latitude') < 0)
+           getLocation();
+   });
+</script>
 
 <table class="table table-condensed">
     <% @events.each_with_index do |e, i| %>
@@ -12,6 +12,7 @@
             <% if e.raw_attributes['cover']  %>
                 <img src="<%= e.raw_attributes['cover']['source'] %>" alt="photo" class="banner events-img"/>
             <% end %>
+
             <h3><%= link_to e.name, "https://facebook.com/#{e.identifier}" %></h3>
             <%= e.description[0..30] if e.description %>
             <%= e.start_time %>

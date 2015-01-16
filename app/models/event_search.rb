@@ -7,15 +7,17 @@ class EventSearch
   end
 
   def search
-    @events = FbGraph::Event.search(
+    @events = Rails.cache.read('events') || FbGraph::Event.search(
       @search_string,
       access_token: @token,
       fields: 'cover,name,description,venue,start_time,picture',
       location: @search_string,
-      start_time: Date.today
+      start_time: Date.today + 1
     ).reject do |e|
       @user.event_filters.exists?(action: "hide", event_id: e.identifier)
     end
+
+    Rails.cache.write('events', @events)
 
     # Filter the event based on the keywords defined in Category by the name of the category
     if @filter
@@ -30,12 +32,42 @@ class EventSearch
 
     #select only the events that contain at least one keyword that defines the category
     @events = @events.select do |e|
+      description = Rails.cache.read("descr#{e.identifier}") || e.description.to_s
+
+      Rails.cache.write("descr#{e.identifier}", description)
       #return true if any of the keywords are found in the description or the name of the event
       res = filter.split(',').any? do |k|
         ActiveSupport::Inflector.transliterate(e.name).include?(k) ||
-        ActiveSupport::Inflector.transliterate(e.description.to_s).include?(k)
+        ActiveSupport::Inflector.transliterate(description).include?(k)
       end
 
+
+      # categs = if @user.my_categories.empty?
+      #   Category.all
+      # else
+      #   @user.my_categories.collect {|c| Category.find(c.category_id)}
+      # end
+      # categs_score = categs.zip([0] * categs.size).to_h
+
+      # categs.map do |c|
+      #   c.keywords.split(',').map do |keyword|
+      #     p keyword
+      #     # p e.description.to_s
+      #     if ActiveSupport::Inflector.transliterate(e.description.to_s).include?(keyword)
+      #       if Keyword.find_by_keyword(keyword)
+      #         categs_score[c] += Keyword.find_by_keyword(keyword).score
+      #         # break
+      #       end
+      #     end
+      #   end
+      # end
+      #
+      # dcat = categs_score.sort_by {|_,v| v}.last
+      # # p categs_score.sort_by {|_,v| v}
+      # p 'TE DOMIN'
+      # if dcat[1] > 0
+      #   e.define_singleton_method(:category) { dcat[0].name }
+      # end
       e if res
     end
 
@@ -45,18 +77,19 @@ class EventSearch
   def events_ordered_by_like_dislike
     search
 
-    @filtered_events = @events.zip([0] * @events.size).to_h
+    # @filtered_events = @events.zip([0] * @events.size).to_h
+    @filtered_events = order_by_keywords
     @disliked_events = []
 
-    @events.map do |e|
-      EventFilter.where(:event_id => e.identifier).each do |filter|
+    @filtered_events.map do |e, _|
+      EventFilter.where(:event_id => e.identifier).map do |filter|
         if filter.action == 'like'
           # push the event in the front
           @filtered_events[e] += 1
-          @filtered_events[e] += 10 if filter.user_id == @user.id
+          @filtered_events[e] += 2 if filter.user_id == @user.id
         elsif filter.action == 'dislike'
           @filtered_events[e] -= 1
-          @filtered_events[e] -= 10 if filter.user_id == @user.id
+          @filtered_events[e] -= 2 if filter.user_id == @user.id
         end
       end
     end
@@ -71,5 +104,33 @@ class EventSearch
     end
 
     events.zip([5] * events.size).to_h
+  end
+
+  def order_by_keywords
+    @filtered_events = @events.zip([0] * @events.size).to_h
+
+    keywords = Keyword.all
+    @events.map do |e|
+      description = Rails.cache.read(e.identifier.to_s) || e.raw_attributes[:description]
+      Rails.cache.write(e.identifier.to_s, description)
+      if description
+        keywords.map do |k|
+          if description.downcase.split(/\W+/).include?(k.keyword)
+              @filtered_events[e] += k.score
+          end
+        end
+        # e.raw_attributes[:description].split(/\W+/).map do |word|
+        #   keyword_score = Keyword.where(keyword: ActiveSupport::Inflector.transliterate(word)).sum(:score)
+        #   my_keyword = @user.keywords.find_by_keyword(word)
+        #
+        # # unless keyword.nil? && keyword.empty?
+        #   @filtered_events[e] += keyword_score
+        #   # @filtered_events[e] += keyword_score * 10 if my_keyword
+        # # end
+        # end
+      end
+    end
+
+    @filtered_events
   end
 end

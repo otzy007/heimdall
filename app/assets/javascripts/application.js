@@ -28,5 +28,5 @@ function getLocation() {
 
 function requestEvents(position) {
     var queryURL = "?latitude=" + position.coords.latitude + "&longitude=" + position.coords.longitude;
-    $(location).attr('href', queryURL);
+    // $(location).attr('href', queryURL);
 }

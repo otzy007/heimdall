@@ -66,11 +66,12 @@ class EventsController < ApplicationController
     ev.raw_attributes[:description].split(/\W+/).each do |keyword|
       if keyword.size > 3
         keyword = ActiveSupport::Inflector.transliterate(keyword)
-        k = current_user.keywords.find_or_create_by(keyword: keyword)
-
-        k.score = 0 if k.score.nil?
-        k.score += score
-        k.save
+        k = Keyword.find_by_keyword(keyword)
+        if k
+          k.score = 0 if k.score.nil?
+          k.score += score
+          k.save
+        end
       end
     end
   end
